@@ -47,3 +47,330 @@ Pay special attention to what data the frontend is expecting from each API respo
 By making notes ahead of time, you will practice the core skill of being able to read and understand code and will have a simple plan to follow to build out the endpoints of your backend API.
 
 > View the [Frontend README](./frontend/README.md) for more details.
+
+## Api Reference
+---
+### Getting started
+- Base Url: The Project's Base Url is not live so it can only be gotten when the projects is cloned and dependencies are installed your personal computer, the base url on your personal computer is available at ``http://localhost:5000/ ``
+- Authentication: At the Moment we don't need authentication or API keys in this application
+
+### Error Handling
+Errors are returned in JSON format like this
+```
+{
+            "success": False,
+            "message": 'resource not found',
+            "error": 404
+}
+
+```
+
+The Api will return error in two formats if the request fails
+
+- 404 when resource is not found
+- 422 when operation is unprocessable
+
+# Endpoints
+> Get /categories
+
+### General:
+- gets all the categories of games available
+
+> sample: ``` curl http://localhost:5000/categories ```
+```
+{
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "success": true
+}
+
+```
+
+> Get /questions
+
+### General:
+- gets a list of questions
+- these questions are paginated in groups of 10
+
+> sample: ``` http://localhost:5000/questions ```
+
+```
+{
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Apollo 13",
+            "category": 5,
+            "difficulty": 4,
+            "id": 2,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "Tom Cruise",
+            "category": 5,
+            "difficulty": 4,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "George Washington Carver",
+            "category": 4,
+            "difficulty": 2,
+            "id": 12,
+            "question": "Who invented Peanut Butter?"
+        },
+        {
+            "answer": "Lake Victoria",
+            "category": 3,
+            "difficulty": 2,
+            "id": 13,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 21
+}
+
+```
+
+> DELETE /questions/1
+
+### General:
+- Deletes question based on id in parameter
+
+
+> POST /questions
+
+### General:
+- Creates a new question
+- This endpoint accepts 4 requests in the body
+- this requests are question,answer,difficulty and category
+
+request sample  
+``` 
+
+{
+    "question":"Who is The fastet runner in the world", 
+    "answer":"Usain Bolt", 
+    "category":"6", 
+    "difficulty":"1"
+
+}
+    
+```
+
+response
+
+```
+{
+        'success': True,
+        'message': "new question added" 
+}
+
+```
+
+> POST /questions/search
+
+### General:
+- searches for a question based on term
+- term used to search is named **searchTerm** in request
+
+request sample
+
+```
+
+{
+    "searchTerm": "who"
+}
+
+```
+
+response
+
+```
+{
+    "currentCategory": "History",
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "George Washington Carver",
+            "category": 4,
+            "difficulty": 2,
+            "id": 12,
+            "question": "Who invented Peanut Butter?"
+        },
+        {
+            "answer": "Alexander Fleming",
+            "category": 1,
+            "difficulty": 3,
+            "id": 21,
+            "question": "Who discovered penicillin?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 21
+}
+
+```
+
+> GET /categories/3/questions
+
+### General:
+- returns questions based on category id
+
+response
+
+```
+
+{
+    "currentCategory": "Geography",
+    "questions": [
+        {
+            "answer": "Lake Victoria",
+            "category": 3,
+            "difficulty": 2,
+            "id": 13,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        },
+        {
+            "answer": "Agra",
+            "category": 3,
+            "difficulty": 2,
+            "id": 15,
+            "question": "The Taj Mahal is located in which Indian city?"
+        }
+    ],
+    "success": true,
+    "totalQuestions": 21
+}
+
+```
+> POST /quizzes
+
+### General:
+- Selects random question if they aren't in array of questions
+- checks quiz category id to know from which category random question will be selected from
+
+request sample
+
+```
+{
+    "previous_questions": [], 
+    'quiz_category': {'id': '5', 'type': 'Entertainment'}
+    }
+
+```
+
+response
+
+```
+{
+    "question": {
+        "answer": "Edward Scissorhands",
+        "category": 5,
+        "difficulty": 3,
+        "id": 6,
+        "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    },
+    "success": true
+}
+
+```
+# Errors
+- error when resource is not found
+
+```
+{
+    "success": False,
+    "message": 'resource not found',
+    "error": 404
+}
+
+```
+
+- error when operation is unprocessable
+
+```
+{
+        "success": False,
+        "message": 'operation unprocessable',
+        "error": 422
+}
+
+```
+
+# Run test
+```
+ createdb trivia_test
+ psql trivia_test < trivia.psql
+ python test_flaskr.py
+
+```

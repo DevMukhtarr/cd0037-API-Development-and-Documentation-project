@@ -25,6 +25,12 @@ class TriviaTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
     
+        self.new_question = {
+            "question": "who is the fastest runner in the world",
+            "answer": "usain bolt",
+            "category": 6,
+            "difficulty": 1
+        }
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -33,7 +39,68 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+    def test_get_categories(self):
+        res = self.client().get("/categories")
+        data = json.loads(res.data)
 
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["categories"])
+
+    def test_get_questions(self):
+        res = self.client().get("/questions")
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["questions"])
+        self.assertTrue(data["totalQuestions"])
+        self.assertTrue(data["categories"])
+
+    def test_question_does_not_exist(self):
+        res = self.client().delete("/questions/1")
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], False)
+        self.assertTrue(data["message"])
+
+    def test_add_new_question(self):
+        res = self.client().post("/questions", json=self.new_question)
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["message"])
+
+    def test_search_new_question_gotten(self):
+        res = self.client().post("/questions/search", json={"searchTerm": "who"})
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["questions"])
+        self.assertTrue(data["totalQuestions"])
+        self.assertTrue(data["currentCategory"])
+
+    def test_get_categories_of_questions_by_id(self):
+        res = self.client().get("/categories/2/questions")
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["questions"])
+        self.assertTrue(data["totalQuestions"])
+        self.assertTrue(data["currentCategory"])
+
+    def test_get_categories_of_questions_by_id(self):
+        res = self.client().post("/quizzes", json={"previous_questions": [], 
+        'quiz_category': {'id': '5', 'type': 'Entertainment'}})
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], True)
+        self.assertTrue(data["question"])
+
+    def test_delete_question_by_id_not_successful(self):
+        res = self.client().delete("/questions/2")
+        data = json.loads(res.data)
+
+        self.assertEqual(data["success"], False)
+        self.assertTrue(data["message"])
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
