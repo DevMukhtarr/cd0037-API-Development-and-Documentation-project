@@ -102,22 +102,15 @@ def create_app(test_config=None):
     @cross_origin()
     def delete_question(id):
         try:
-            questions = Question.query.order_by(Question.id).all()
-            for question in questions:
-                if(question.id == id):
-                    to_delete = Question.query.filter(Question.id == id).one_or_none()
+            question = Question.query.filter(Question.id == id).one_or_none()
 
-                    to_delete.delete()
-                else:
-                    return jsonify({
-                        "success": False,
-                        "message": "Question does not exist"
-                    }) 
+            question.delete()
 
             return jsonify({
                 "success": True,
-                "id": id + "deleted successfully"
-            }) 
+                "message": "Question deleted successfully"
+                })
+
         except:
             abort(422)
     """
@@ -294,6 +287,11 @@ def create_app(test_config=None):
                     selected_question["answer"] = new_question.answer
                     selected_question["difficulty"] = new_question.difficulty
                     selected_question["category"] = new_question.category
+                else:
+                    return jsonify({
+                "success": "False",
+                "message": "All questions have been provided"
+            })
             return jsonify({
                 "success": True,
                 "question": selected_question
@@ -325,4 +323,3 @@ def create_app(test_config=None):
 
     return app
 
-    
