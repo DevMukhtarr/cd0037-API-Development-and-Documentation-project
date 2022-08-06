@@ -70,7 +70,7 @@ def create_app(test_config=None):
             category_object = {}
             questions_list= []
             page = request.args.get('page', 1, type=int)
-            start = ( page - 1 ) * 10
+            start = ( page - 1 ) * QUESTIONS_PER_PAGE
             end = start + 10
             for category in categories:
                 category_object[category.id] = category.type
