@@ -181,9 +181,9 @@ def create_app(test_config=None):
             all_questions = []
             all_categories = {}
             categories = Category.query.order_by(Category.id).all()
-            questions = Question.query.order_by(Question.id).all()
             if "searchTerm" in body:
                 search_term = body.get("searchTerm")
+            questions = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
 
             for question in questions:
                 if(search_term) in question.question.lower():
